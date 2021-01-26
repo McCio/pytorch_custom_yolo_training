@@ -4,6 +4,9 @@ import os
 
 def convert(labels_folder):
     for fname in os.listdir(labels_folder):
+        if fname.startswith('.'):
+            # ignore dot files
+            continue
         new_labels_folder = labels_folder.replace('original_', '')
         with open(path.join(labels_folder, fname), 'r') as f:
             source = f.readline()
