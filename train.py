@@ -4,6 +4,7 @@ from models import *
 from utils.utils import *
 from utils.datasets import *
 from utils.parse_config import *
+from utils.convert_labels import convert
 
 import os
 import sys
@@ -21,10 +22,11 @@ import torch.optim as optim
 parser = argparse.ArgumentParser()
 parser.add_argument("--epochs", type=int, default=20, help="number of epochs")
 parser.add_argument("--image_folder", type=str, default="data/artifacts/images", help="path to dataset")
+parser.add_argument("--convert", type=bool, default=True, help="convert labels from original_labels folder")
 parser.add_argument("--batch_size", type=int, default=16, help="size of each image batch")
-parser.add_argument("--model_config_path", type=str, default="config/yolov3.cfg", help="path to model config file")
+parser.add_argument("--model_config_path", type=str, default="config/yolov3-tiny.cfg", help="path to model config file")
 parser.add_argument("--data_config_path", type=str, default="config/coco.data", help="path to data config file")
-parser.add_argument("--weights_path", type=str, default="config/yolov3.weights", help="path to weights file")
+parser.add_argument("--weights_path", type=str, default="config/yolov3-tiny.weights", help="path to weights file")
 parser.add_argument("--class_path", type=str, default="config/coco.names", help="path to class label file")
 parser.add_argument("--conf_thres", type=float, default=0.8, help="object confidence threshold")
 parser.add_argument("--nms_thres", type=float, default=0.4, help="iou thresshold for non-maximum suppression")
@@ -35,6 +37,9 @@ parser.add_argument("--checkpoint_dir", type=str, default="checkpoints", help="d
 parser.add_argument("--use_cuda", type=bool, default=True, help="whether to use cuda if available")
 opt = parser.parse_args()
 print(opt)
+
+if opt.convert:
+    convert(opt.image_folder.replace('images', 'original_labels'))
 
 cuda = torch.cuda.is_available() and opt.use_cuda
 

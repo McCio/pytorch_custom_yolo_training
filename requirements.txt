@@ -1,0 +1,6 @@
+python=3.7.9
+pytorch
+torchvision
+numpy
+opencv
+scikit-learn
