@@ -66,7 +66,8 @@ def create_modules(module_defs):
 
         elif module_def["type"] == "route":
             layers = [int(x) for x in module_def["layers"].split(",")]
-            filters = sum([output_filters[layer_i] for layer_i in layers])
+            # see https://github.com/eriklindernoren/PyTorch-YOLOv3/issues/82#issuecomment-446057250
+            filters = sum([output_filters[layer_i+int(layer_i > 0)] for layer_i in layers])
             modules.add_module("route_%d" % i, EmptyLayer())
 
         elif module_def["type"] == "shortcut":
