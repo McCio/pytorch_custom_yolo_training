@@ -1,24 +1,22 @@
 from __future__ import division
 
+import argparse
+import datetime
 import os
 import sys
 import time
-import datetime
-import argparse
-
-from models import Darknet
-from utils.utils import load_classes
-from utils.datasets import ListDataset
-from utils.parse_config import parse_data_config, parse_model_config
-from utils.convert_labels import convert
 
 import torch
-from torch.utils.data import DataLoader
-from torchvision import datasets
-from torchvision import transforms
-from torch.autograd import Variable
 import torch.optim as optim
+from torch.autograd import Variable
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
 
+from models import Darknet
+from utils.convert_labels import convert
+from utils.datasets import ListDataset
+from utils.parse_config import parse_data_config, parse_model_config
+from utils.utils import load_classes
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--epochs", type=int, default=20, help="number of epochs")
@@ -79,7 +77,9 @@ Tensor = torch.cuda.FloatTensor if cuda else torch.FloatTensor
 optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, model.parameters()))
 
 for epoch in range(opt.epochs):
+    tic = time.perf_counter()
     for batch_i, (_, imgs, targets) in enumerate(dataloader):
+        tac = time.perf_counter()
         imgs = Variable(imgs.type(Tensor))
         targets = Variable(targets.type(Tensor), requires_grad=False)
 
@@ -89,14 +89,17 @@ for epoch in range(opt.epochs):
 
         loss.backward()
         optimizer.step()
+        toc = time.perf_counter()
 
         print(
-            "[Epoch %d/%d, Batch %d/%d] [Losses: x %f, y %f, w %f, h %f, conf %f, cls %f, total %f, recall: %.5f, precision: %.5f]"
+            "[Epoch %d/%d, Batch %d/%d, %6.3f+%6.3f seconds] [Losses: x %.5f, y %.5f, w %8.5f, h %8.5f, conf %8.5f, cls %.5f, total %9.5f, recall: %.5f, precision: %.5f]"
             % (
                 epoch,
                 opt.epochs,
                 batch_i,
                 len(dataloader),
+                tac - tic,
+                toc - tac,
                 model.losses["x"],
                 model.losses["y"],
                 model.losses["w"],
@@ -110,6 +113,7 @@ for epoch in range(opt.epochs):
         )
 
         model.seen += imgs.size(0)
+        tic = time.perf_counter()
 
     if epoch % opt.checkpoint_interval == 0:
         model.save_weights("%s/%d.weights" % (opt.checkpoint_dir, epoch))
