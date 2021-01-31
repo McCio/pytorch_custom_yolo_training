@@ -63,7 +63,8 @@ class ListDataset(Dataset):
         img_path = self.img_files[index % len(self.img_files)].rstrip()
         img = np.array(Image.open(img_path))
 
-        # Handles images with less than three channels
+        # Skips images with less than three channels
+        # Issue: the first 3-channels image after n 2-channels image is repeated n+1 times
         while len(img.shape) != 3:
             index += 1
             img_path = self.img_files[index % len(self.img_files)].rstrip()
@@ -94,21 +95,11 @@ class ListDataset(Dataset):
         labels = None
         if os.path.exists(label_path):
             labels = np.loadtxt(label_path).reshape(-1, 5)
-            # Extract coordinates for unpadded + unscaled image
-            x1 = (labels[:, 1] - labels[:, 3]/2)
-            y1 = (labels[:, 2] - labels[:, 4]/2)
-            x2 = (labels[:, 1] + labels[:, 3]/2)
-            y2 = (labels[:, 2] + labels[:, 4]/2)
-            # Adjust for added padding
-            x1 += pad[1][0]
-            y1 += pad[0][0]
-            x2 += pad[1][0]
-            y2 += pad[0][0]
             # Calculate ratios from coordinates
-            labels[:, 1] = ((x1 + x2) / 2) / padded_w
-            labels[:, 2] = ((y1 + y2) / 2) / padded_h
-            labels[:, 3] *= w / padded_w
-            labels[:, 4] *= h / padded_h
+            labels[:, 1] = (labels[:, 1] + pad[1][0]) / padded_w
+            labels[:, 2] = (labels[:, 2] + pad[0][0]) / padded_h
+            labels[:, 3] /= padded_w
+            labels[:, 4] /= padded_h
         # Fill matrix
         filled_labels = np.zeros((self.max_objects, 5))
         if labels is not None:
