@@ -95,10 +95,10 @@ class ListDataset(Dataset):
         if os.path.exists(label_path):
             labels = np.loadtxt(label_path).reshape(-1, 5)
             # Extract coordinates for unpadded + unscaled image
-            x1 = w * (labels[:, 1] - labels[:, 3]/2)
-            y1 = h * (labels[:, 2] - labels[:, 4]/2)
-            x2 = w * (labels[:, 1] + labels[:, 3]/2)
-            y2 = h * (labels[:, 2] + labels[:, 4]/2)
+            x1 = (labels[:, 1] - labels[:, 3]/2)
+            y1 = (labels[:, 2] - labels[:, 4]/2)
+            x2 = (labels[:, 1] + labels[:, 3]/2)
+            y2 = (labels[:, 2] + labels[:, 4]/2)
             # Adjust for added padding
             x1 += pad[1][0]
             y1 += pad[0][0]
