@@ -19,6 +19,7 @@ from torchvision import transforms
 from torch.autograd import Variable
 import torch.optim as optim
 
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--epochs", type=int, default=20, help="number of epochs")
 parser.add_argument("--image_folder", type=str, default="data/artifacts/images", help="path to dataset")

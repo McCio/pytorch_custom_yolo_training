@@ -119,10 +119,10 @@ class LabelTool():
 
         self.imageDir = os.path.join('forboxing', str(self.imgclass))
         print(self.imageDir)
-        self.imageList = glob.glob(os.path.join(self.imageDir, '*.jpg'))
+        self.imageList = glob.glob(os.path.join(self.imageDir, '*.png'))
         self.imageList = sorted(self.imageList)
         if len(self.imageList) == 0:
-            print('No .JPG images found in the specified dir!')
+            print('No .PNG images found in the specified dir!')
             return
 
         # default to the 1st image in the collection
@@ -135,7 +135,7 @@ class LabelTool():
             os.mkdir(self.outDir)
 
 
-        filelist = glob.glob(os.path.join(self.imageDir, '*.jpg'))
+        filelist = glob.glob(os.path.join(self.imageDir, '*.png'))
         self.tmp = []
         self.egList = []
         #random.shuffle(filelist)

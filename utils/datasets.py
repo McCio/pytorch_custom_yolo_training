@@ -18,7 +18,7 @@ import sys
 
 class ImageFolder(Dataset):
     def __init__(self, folder_path, img_size=416):
-        self.files = sorted(glob.glob('%s/*.*' % folder_path))
+        self.files = sorted(glob.glob('%s/*.png' % folder_path))
         self.img_shape = (img_size, img_size)
 
     def __getitem__(self, index):

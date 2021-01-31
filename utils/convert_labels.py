@@ -1,6 +1,24 @@
 import os.path as path
 import os
 
+label_to_int = {
+    "large-vehicle": 1,
+    "swimming-pool": 2,
+    "helicopter": 3,
+    "bridge": 4,
+    "plane": 5,
+    "ship": 6,
+    "soccer-ball-field": 7,
+    "basketball-court": 8,
+    "ground-track-field": 9,
+    "small-vehicle": 10,
+    "harbor": 11,
+    "baseball-diamond": 12,
+    "tennis-court": 13,
+    "roundabout": 14,
+    "storage-tank": 15,
+    "container-crane": 16,
+}
 
 def convert(labels_folder):
     for fname in os.listdir(labels_folder):
@@ -15,7 +33,7 @@ def convert(labels_folder):
                 for label in f:
                     things = label.split(' ')
                     x1, y1, x2, y2, x3, y3, x4, y4 = map(float, things[:8])
-                    category = things[8]
+                    category = label_to_int[things[8]]
                     difficult = things[9]  # not used now
                     xmin = min(x1, x2, x3, x4)
                     xmax = max(x1, x2, x3, x4)
@@ -25,4 +43,4 @@ def convert(labels_folder):
 
 
 if __name__ == '__main__':
-    convert('yolo/pytorch_custom_yolo_training/data/artifacts/original_labels')
+    convert('data/artifacts/original_labels')
