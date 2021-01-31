@@ -1,0 +1,6 @@
+classes=16
+train=data/artifacts/train.txt
+valid=data/artifacts/val.txt
+names=config/dota.names
+backup=backup/
+

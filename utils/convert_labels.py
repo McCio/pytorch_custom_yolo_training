@@ -2,22 +2,22 @@ import os.path as path
 import os
 
 label_to_int = {
-    "large-vehicle": 1,
-    "swimming-pool": 2,
-    "helicopter": 3,
-    "bridge": 4,
-    "plane": 5,
-    "ship": 6,
-    "soccer-ball-field": 7,
-    "basketball-court": 8,
-    "ground-track-field": 9,
-    "small-vehicle": 10,
-    "harbor": 11,
-    "baseball-diamond": 12,
-    "tennis-court": 13,
-    "roundabout": 14,
-    "storage-tank": 15,
-    "container-crane": 16,
+    "large-vehicle": 0,
+    "swimming-pool": 1,
+    "helicopter": 2,
+    "bridge": 3,
+    "plane": 4,
+    "ship": 5,
+    "soccer-ball-field": 6,
+    "basketball-court": 7,
+    "ground-track-field": 8,
+    "small-vehicle": 9,
+    "harbor": 10,
+    "baseball-diamond": 11,
+    "tennis-court": 12,
+    "roundabout": 13,
+    "storage-tank": 14,
+    "container-crane": 15,
 }
 
 def convert(labels_folder):

@@ -1,16 +1,16 @@
 from __future__ import division
 
-from models import *
-from utils.utils import *
-from utils.datasets import *
-from utils.parse_config import *
-from utils.convert_labels import convert
-
 import os
 import sys
 import time
 import datetime
 import argparse
+
+from models import Darknet
+from utils.utils import load_classes
+from utils.datasets import ListDataset
+from utils.parse_config import parse_data_config, parse_model_config
+from utils.convert_labels import convert
 
 import torch
 from torch.utils.data import DataLoader
@@ -26,9 +26,9 @@ parser.add_argument("--image_folder", type=str, default="data/artifacts/images",
 parser.add_argument("--convert", type=bool, default=True, help="convert labels from original_labels folder")
 parser.add_argument("--batch_size", type=int, default=16, help="size of each image batch")
 parser.add_argument("--model_config_path", type=str, default="config/yolov3-tiny.cfg", help="path to model config file")
-parser.add_argument("--data_config_path", type=str, default="config/coco.data", help="path to data config file")
+parser.add_argument("--data_config_path", type=str, default="config/dota.data", help="path to data config file")
 parser.add_argument("--weights_path", type=str, default="config/yolov3-tiny.weights", help="path to weights file")
-parser.add_argument("--class_path", type=str, default="config/coco.names", help="path to class label file")
+parser.add_argument("--class_path", type=str, default="config/dota.names", help="path to class label file")
 parser.add_argument("--conf_thres", type=float, default=0.8, help="object confidence threshold")
 parser.add_argument("--nms_thres", type=float, default=0.4, help="iou thresshold for non-maximum suppression")
 parser.add_argument("--n_cpu", type=int, default=0, help="number of cpu threads to use during batch generation")
